@@ -11,8 +11,8 @@ import pymysql
 import traceback
 import random
 
-#获取5到20的随机浮点数
-randnum=random.uniform(5,20)
+#获取20到30的随机浮点数
+randnum=random.uniform(20,30)
 url="http://quote.eastmoney.com/center/list.html#33"
 
 #使用firefox驱动打开网页
@@ -36,7 +36,7 @@ def get_data():
     stock_id=[]
     name_list=[]
     url_list=[]
-    for i in range(1,164):
+    for i in range(1,32):
         #当翻页的时候页面布局会发生变化，导致CSS无法定位，使用if语句进行判断
         if int(driver.find_element_by_css_selector(".current").text)<4:
             for j in range(1,11):
@@ -85,7 +85,7 @@ def get_data():
                 print(name_list) 
             driver.find_element_by_css_selector("#pagenav > a:nth-child(9)").click()
             time.sleep(randnum)
-        elif int(driver.find_element_by_css_selector(".current").text)==161:
+        elif int(driver.find_element_by_css_selector(".current").text)==161 or int(driver.find_element_by_css_selector(".current").text)==29:
             for j in range(1,11):
                 stock_css1="#fixed > tbody:nth-child(1) > tr:nth-child("+str(j*2)+")> td:nth-child(2) > a:nth-child(1)"
                 stock_css2="tr.bg:nth-child("+str(j*2+1)+") > td:nth-child(2) > a:nth-child(1)"
@@ -108,7 +108,7 @@ def get_data():
                 print(name_list) 
             driver.find_element_by_css_selector("#pagenav > a:nth-child(8)").click()
             time.sleep(randnum)
-        elif int(driver.find_element_by_css_selector(".current").text)==162:
+        elif int(driver.find_element_by_css_selector(".current").text)==162 or int(driver.find_element_by_css_selector(".current").text)==30:
             for j in range(1,11):
                 stock_css1="#fixed > tbody:nth-child(1) > tr:nth-child("+str(j*2)+")> td:nth-child(2) > a:nth-child(1)"
                 stock_css2="tr.bg:nth-child("+str(j*2+1)+") > td:nth-child(2) > a:nth-child(1)"
@@ -169,9 +169,11 @@ def chaxun():
     new_url=get_data()
     sql="insert into test.eastmoney_basic_info  values (%s,%s,%s)"
     cursor=conn.cursor()
-    for i in range(0,3251):    
-        cursor.execute(sql,(new_url[0][i],new_url[1][i],new_url[2][i]))
-
+    try:
+        for i in range(0,613):    
+            cursor.execute(sql,(new_url[0][i],new_url[1][i],new_url[2][i]))
+    except Exception as e:
+        print("循环太多次了")
 if __name__=="__main__":
     try:
         chaxun()
