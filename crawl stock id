@@ -11,7 +11,7 @@ import pymysql
 import traceback
 import random
 
-#获取5到20的随机浮点数
+#获取20到30的随机浮点数
 randnum=random.uniform(20,30)
 url="http://quote.eastmoney.com/center/list.html#20"
 #url="http://quote.eastmoney.com/center/list.html#10"
